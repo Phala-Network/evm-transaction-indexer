@@ -31,6 +31,8 @@ processor.run(new TypeormDatabase(), async ctx => {
         return new Map(accounts.map(a => [a.id, a]))
     })
 
+    console.log(knownAccounts)
+
     let transactions: Transaction[] = [];
     for (const block of ctx.blocks) {
         let blockNumber = block.header.height;
@@ -43,15 +45,18 @@ processor.run(new TypeormDatabase(), async ctx => {
                 // doesn't have a recipient.
                 let to = tx.to!;
                 let nonce = tx.nonce;
+
                 // note this: must agree on what case to use
                 if (WHITELIST_CONFIG.whitelistItems.includes(from.toUpperCase())) {
                     console.log(`${from} -> ${to}: ${nonce}`);
-                    
+
                     let account = knownAccounts.get(from);
                     if (account === undefined) {
                         account = new Account();
                         account.id = from;
                     }
+                    knownAccounts.set(account.id, account);
+
                     let result = tx.status! === 1;
                     transactions.push(new Transaction({
                         id: tx.id,
