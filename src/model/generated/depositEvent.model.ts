@@ -3,23 +3,30 @@ import * as marshal from "./marshal"
 import {Account} from "./account.model"
 
 @Entity_()
-export class Transaction {
-    constructor(props?: Partial<Transaction>) {
+export class DepositEvent {
+    constructor(props?: Partial<DepositEvent>) {
         Object.assign(this, props)
     }
 
     @PrimaryColumn_()
     id!: string
 
+    @Column_("text", {nullable: false})
+    name!: string
+
     @Index_()
     @ManyToOne_(() => Account, {nullable: true})
     account!: Account
 
-    @Column_("int4", {nullable: false})
-    nonce!: number
+    @Column_("text", {nullable: false})
+    amount!: string
 
     @Column_("bool", {nullable: false})
     result!: boolean
+
+    @Index_()
+    @Column_("int4", {nullable: false})
+    indexInBlock!: number
 
     @Index_()
     @Column_("int4", {nullable: false})

@@ -6,7 +6,8 @@ export const WHITELIST_CONFIG: IWhiteListConfing = getJSON(
 )
 
 interface IWhiteListConfing {
-    whitelistItems: string[]
+    Accounts: string[],
+    Events: String[],
 }
 
 function getJSON(filename: string) {

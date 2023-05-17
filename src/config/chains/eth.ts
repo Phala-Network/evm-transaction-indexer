@@ -5,14 +5,12 @@ const config: ProcessorConfig = {
     chainName: 'eth',
     prefix: 'eth',
     dataSource: {
-        archive:
-        // lookupArchive('eth-mainnet')
-        lookupArchive('moonbeam', { type: 'EVM' }),
+        archive: lookupArchive('eth-mainnet'),
     },
-    blockRange: //undefined
+    blockRange:
     {
-        from: 3043509,
-        //to: 3043543
+        from: 17114617,
+        to: 17114617
     }
 };
 

@@ -1,5 +1,5 @@
 manifestVersion: subsquid.io/v0.1
-name: evm-transaction-indexer
+name: graph-moonbeam
 version: 1
 description: 'Basic example of processing evm logs '
 build: 
