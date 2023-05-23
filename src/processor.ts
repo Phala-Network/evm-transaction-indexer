@@ -19,7 +19,7 @@ const processor = new EvmBatchProcessor()
         data: {
             kind: true,
             address: true,
-            evmLog: { id: true, topics: true, data: true, name: true },
+            evmLog: { id: true, topics: true, data: true, name: true, address: true },
             transaction: {
                 status: true,
                 hash: true,
@@ -86,6 +86,13 @@ processor.run(new TypeormDatabase(), async ctx => {
                 }
             } else if (item.kind === 'evmLog') {
                 console.log(item)
+                if (item.evmLog && item.evmLog.data) {
+                    const { token, recipient, amount } = decodeData(item.evmLog.data);
+                    console.log(`data: ${item.evmLog.data}`);
+                    console.log(`token: ${token}`);
+                    console.log(`recipient: ${recipient}`);
+                    console.log(`amount: ${amount}`);
+                }
 
             }
         }
@@ -94,3 +101,30 @@ processor.run(new TypeormDatabase(), async ctx => {
     await ctx.store.save([...knownAccounts.values()]);
     await ctx.store.insert(transactions);
 });
+
+function decodeData(data: string): { token: string; recipient: string; amount: number } {
+    if (data.startsWith('0x')) {
+        data = data.slice(2);
+    }
+    const chunks = data.match(/.{8}/g);
+
+    if (!chunks) {
+        return {
+            token: "",
+            recipient: "",
+            amount: 0
+        }
+    }
+
+    const reversedData = chunks.map((chunk) => chunk.match(/.{2}/g)!.reverse().join('')).join('');
+
+    const token = '0x' + reversedData.slice(0, 40);
+    const recipient = '0x' + reversedData.slice(40, 80);
+    const amount = parseInt(reversedData.slice(80), 16);
+
+    return {
+        token,
+        recipient,
+        amount,
+    };
+}
