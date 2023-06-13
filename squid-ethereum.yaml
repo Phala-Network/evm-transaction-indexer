@@ -1,7 +1,7 @@
 manifestVersion: subsquid.io/v0.1
-name: graph-moonbeam
+name: graph-ethereum
 version: 1
-description: 'Basic example of processing evm logs '
+description: 'inDEX Ethereum Indexer'
 build: 
 deploy:
   addons:
@@ -9,10 +9,18 @@ deploy:
   processor:
     env:
       CHAIN:
-        eth
+        ethereum
+      CHAIN_TYPE:
+        evm
+      FROM_BLOCK:
+        17133894
+      TO_BLOCK:
+        17133895
+      DATA_SOURCE:
+        https://eth.archive.subsquid.io
     cmd:
       - node
-      - lib/processor
+      - lib/processor-evm
   api:
     cmd:
       - npx
