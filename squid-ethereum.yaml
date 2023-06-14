@@ -16,8 +16,10 @@ deploy:
         17133894
       TO_BLOCK:
         17133895
+      CHAIN_RPC:
+        https://rpc.ankr.com/eth
       DATA_SOURCE:
-        https://eth.archive.subsquid.io
+        https://v2.archive.subsquid.io/network/ethereum-mainnet
     cmd:
       - node
       - lib/processor-evm

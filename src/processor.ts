@@ -13,6 +13,7 @@ const processor = new EvmBatchProcessor()
         to: Number(process.env.TO_BLOCK)
     })
     .setDataSource({
+        chain: String(process.env.CHAIN_RPC),
         archive: String(process.env.DATA_SOURCE)
     })
     .setFields({
@@ -25,29 +26,27 @@ const processor = new EvmBatchProcessor()
             status: true,
         },
     })
-    // Txs sent from vitalik.eth
     .addTransaction({
         from: WORKER_ACCOUNTS,
     })
 
 processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
     let transactions: Transaction[] = []
-
     for (let block of ctx.blocks) {
         for (let transaction of block.transactions) {
-            if (findAccount(transaction.from)) {
+            if (!findAccount(transaction.from)) {
                 continue
             }
-            transactions.push(
-                new Transaction({
-                    id: transaction.id,
-                    account: transaction.from,
-                    nonce: transaction.nonce,
-                    result: transaction.status === 0,
-                    blockNumber: block.header.height,
-                    timestamp: block.header.timestamp.toString(),
-                })
-            )
+            let tx = new Transaction({
+                id: transaction.id,
+                account: transaction.from,
+                nonce: transaction.nonce,
+                result: transaction.status === 0,
+                blockNumber: block.header.height,
+                timestamp: block.header.timestamp.toString(),
+            })
+            console.log(`Save a Ethereum tx signed by worker: ${JSON.stringify(tx, null, 2)}`)
+            transactions.push(tx)
         }
     }
 
