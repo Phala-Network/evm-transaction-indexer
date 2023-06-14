@@ -16,6 +16,7 @@ const processor = new EvmBatchProcessor()
         chain: String(process.env.CHAIN_RPC),
         archive: String(process.env.DATA_SOURCE)
     })
+    .setFinalityConfirmation(10)
     .setFields({
         transaction: {
             from: true,
@@ -41,7 +42,8 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
                 id: transaction.id,
                 account: transaction.from,
                 nonce: transaction.nonce,
-                result: transaction.status === 0,
+                /// 1 for success, 0 for failure
+                result: transaction.status === 1,
                 blockNumber: block.header.height,
                 timestamp: block.header.timestamp.toString(),
             })
