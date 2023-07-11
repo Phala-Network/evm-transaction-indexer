@@ -40,7 +40,7 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
             }
             let tx = new Transaction({
                 id: transaction.id,
-                account: transaction.from,
+                account: transaction.from.toLowerCase(),
                 nonce: transaction.nonce,
                 /// 1 for success, 0 for failure
                 result: transaction.status === 1,
