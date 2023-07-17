@@ -2,24 +2,19 @@ manifestVersion: subsquid.io/v0.1
 name: graph-ethereum
 version: 1
 description: 'inDEX Ethereum Indexer'
-build: 
+build:
 deploy:
   addons:
-    postgres: 
+    postgres:
   processor:
     env:
-      CHAIN:
-        ethereum
-      CHAIN_TYPE:
-        evm
-      FROM_BLOCK:
-        17133894
-      TO_BLOCK:
-        17133895
-      CHAIN_RPC:
-        https://rpc.ankr.com/eth
-      DATA_SOURCE:
-        https://v2.archive.subsquid.io/network/ethereum-mainnet
+      CHAIN: ethereum
+      CHAIN_TYPE: evm
+      FROM_BLOCK: 17133894
+      # TO_BLOCK:
+      #   17133895
+      CHAIN_RPC: https://rpc.ankr.com/eth
+      DATA_SOURCE: https://v2.archive.subsquid.io/network/ethereum-mainnet
     cmd:
       - node
       - lib/processor-evm

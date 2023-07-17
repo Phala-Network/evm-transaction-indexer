@@ -10,7 +10,7 @@ import { findAccount, WORKER_ACCOUNTS } from './utils'
 const processor = new EvmBatchProcessor()
     .setBlockRange({
         from: Number(process.env.FROM_BLOCK),
-        to: Number(process.env.TO_BLOCK)
+        to: Number(process.env.TO_BLOCK) || undefined
     })
     .setDataSource({
         chain: String(process.env.CHAIN_RPC),
